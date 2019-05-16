@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:dubbo="http://code.alibabatech.com/schema/dubbo" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd
+        http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd">
+	<!-- 属性文件的导入 -->
+	<context:property-placeholder location="classpath:properties/*.properties" />
+	<!-- controller的扫描 -->
+	<context:component-scan base-package="com.suchuner.shop.search" />
+	<!-- 映射器和适配器的注解扫描 -->
+	<mvc:annotation-driven />
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/jsp/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+	<!-- 引用dubbo服务 -->
+	<dubbo:application name="shop-search-web" />
+	<dubbo:registry protocol="zookeeper" address="192.168.25.128:2181" />
+
+	<dubbo:reference interface="com.suchuner.shop.search.service.ISearchItemService"
+		id="searchItemService" timeout="300000" />
+	<!-- timeout 设置超时 -->
+	<!-- 配置全局的异常处理器 -->
+	<bean class="com.suchuner.shop.search.exceptionHandler.SearchExceptionReslover"></bean>
+	<!-- 配置邮件发送服务 -->
+		<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<!-- 基于校验规则的邮件发送方式 -->
+		<!-- SMTP协议介绍 vpchwdehvvdnjeib -->
+		<property name="host" value="smtp.qq.com" />
+		<property name="username" value="${EMAIL_ACCOUNT}" />
+		<property name="password" value="${EMAIL_PASSWORD}" />
+		<property name="javaMailProperties">
+			<props>
+				<!-- 必须进行授权认证，它的目的就是阻止他人任意乱发邮件 -->
+				<prop key="mail.smtp.auth">true</prop>
+				<!-- SMTP加密方式:连接到一个TLS保护连接 -->
+				<prop key="mail.smtp.starttls.enable">true</prop>
+				<!-- 设置邮件发送超时时间 -->
+				<prop key="mail.smtp.timeout">25000</prop>  
+			</props>
+		</property>
+	</bean>
+</beans>

@@ -1,0 +1,38 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.suchuner</groupId>
+    <artifactId>shop-parent</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+  <groupId>com.suchuner</groupId>
+  <artifactId>shop-manager</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <modules>
+  	<module>shop-pojo</module>
+  	<module>shop-service</module>
+  	<module>shop-interface</module>
+  	<module>shop-dao</module>
+  </modules>
+  <dependencies>
+  	<dependency>
+  		<groupId>com.suchuner</groupId>
+  		<artifactId>shop-common</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  </dependencies>
+  <build>
+		<plugins>
+			<!-- 配置tomcat插件 -->
+			<plugin>
+				<groupId>org.apache.tomcat.maven</groupId>
+				<artifactId>tomcat7-maven-plugin</artifactId>
+				<configuration>
+					<port>8083</port>
+					<path>/</path>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>
